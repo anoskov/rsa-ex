@@ -97,6 +97,19 @@ defmodule RsaEx do
     {:ok, :public_key.encrypt_public(message, pub_key_seq)} |> url_encode64
   end
 
+  @doc """
+  Decrypt message with RSA private key
+      iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, rsa_private_key)
+      {:ok, "Important message"}
+  """
+  @spec decrypt(String.t, private_key) :: {atom, String.t}
+  def decrypt(cipher_msg, private_key) do
+    {:ok, cipher_bytes} = Base.url_decode64(cipher_msg)
+    {:ok, priv_key} = loads(private_key)
+    {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
+    {:ok, :public_key.decrypt_private(cipher_bytes, priv_key_seq)}
+  end
+
   ### Internal functions
 
   defp loads(pem_string) do
