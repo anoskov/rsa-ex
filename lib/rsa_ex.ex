@@ -83,9 +83,23 @@ defmodule RsaEx do
     {:ok, :public_key.verify(message, :sha256, signature, pub_key_seq)}
   end
 
+  @doc """
+  Encrypt message with RSA public key in base64
+      iex> clear_text = "Important message"
+      "Important message"
+      iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, rsa_public_key)
+      {:ok, "Lmbv...HQ=="}
+  """
+  @spec encrypt(String.t, public_key) :: {atom, String.t}
+  def encrypt(message, public_key) do
+    {:ok, pub_key} = loads(public_key)
+    {:ok, pub_key_seq} = RsaEx.RSAPublicKey.as_sequence(pub_key)
+    {:ok, :public_key.encrypt_public(message, pub_key_seq)} |> url_encode64
+  end
+
   ### Internal functions
 
-  def loads(pem_string) do
+  defp loads(pem_string) do
     pem_entries = :public_key.pem_decode(pem_string)
       validate_pem_length(pem_entries)
       |> load_pem_entry
@@ -119,5 +133,12 @@ defmodule RsaEx do
       x ->
         {:error, "invalid argument, expected one of[ExPublicKey.RSAPublicKey, ExPublicKey.RSAPrivateKey], found: #{x}"}
     end
+  end
+
+  defp url_encode64({:ok, bytes_to_encode}) do
+    url_encode64(bytes_to_encode)
+  end
+  defp url_encode64(bytes_to_encode) do
+    {:ok, Base.url_encode64(bytes_to_encode)}
   end
 end
