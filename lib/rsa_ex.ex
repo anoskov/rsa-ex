@@ -62,12 +62,25 @@ defmodule RsaEx do
   @doc """
   Sign message with RSA private key
       iex> {:ok, signature} = RsaEx.sign(message, rsa_private_key)
+      {:ok, <<...>>}
   """
   @spec sign(String.t, private_key) :: {atom, binary}
   def sign(message, private_key) do
     {:ok, priv_key} = loads(private_key)
     {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
     {:ok, :public_key.sign(message, :sha256, priv_key_seq)}
+  end
+
+  @doc """
+  Verify signature with RSA public key
+      iex> {:ok, valid} = ExPublicKey.verify(message, signature, rsa_public_key
+      {:ok, true}
+  """
+  @spec verify(String.t, binary, public_key) :: {atom, boolean}
+  def verify(message, signature, public_key) do
+    {:ok, pub_key} = loads(public_key)
+    {:ok, pub_key_seq} = RsaEx.RSAPublicKey.as_sequence(pub_key)
+    {:ok, :public_key.verify(message, :sha256, signature, pub_key_seq)}
   end
 
   ### Internal functions
