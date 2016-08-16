@@ -73,7 +73,7 @@ defmodule RsaEx do
 
   @doc """
   Verify signature with RSA public key
-      iex> {:ok, valid} = ExPublicKey.verify(message, signature, rsa_public_key
+      iex> {:ok, valid} = RsaEx.verify(message, signature, rsa_public_key
       {:ok, true}
   """
   @spec verify(String.t, binary, public_key) :: {atom, boolean}

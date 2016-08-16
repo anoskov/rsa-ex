@@ -52,5 +52,5 @@ iex> {:ok, signature} = RsaEx.sign("message", rsa_private_key)
 * Verify signature with RSA public key
 
 ```elixir
-iex> {:ok, valid} = ExPublicKey.verify(message, signature, rsa_public_key)
+iex> {:ok, valid} = RsaEx.verify(message, signature, rsa_public_key)
 ```
