@@ -54,3 +54,12 @@ iex> {:ok, signature} = RsaEx.sign("message", rsa_private_key)
 ```elixir
 iex> {:ok, valid} = RsaEx.verify(message, signature, rsa_public_key)
 ```
+
+* Encrypt message with RSA public key in base64
+
+```elixir
+iex> clear_text = "Important message"
+"Important message"
+iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, rsa_public_key)
+{:ok, "Lmbv...HQ=="}
+```
