@@ -42,3 +42,9 @@ iex> {:ok, pub} = RsaEx.generate_public_key(priv)
 ```elixir
 iex> {:ok, {priv, pub}} = RsaEx.generate_keypair
 ```
+* Sign message with RSA private key
+
+```elixir
+iex> {:ok, rsa_private_key} = RsaEx.generate_private_key
+iex> {:ok, signature} = RsaEx.sign("message", rsa_private_key)
+```

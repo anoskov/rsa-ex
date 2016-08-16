@@ -1,4 +1,5 @@
 defmodule RsaEx do
+  alias RsaEx.RSAPrivateKey
 
   @type private_key :: String.t
   @type public_key :: String.t
@@ -56,5 +57,54 @@ defmodule RsaEx do
     {_, 0} = System.cmd "rm", ["-f", public_key_name]
 
     {:ok, {priv, pub}}
+  end
+
+  @doc """
+  Sign message with RSA private key
+      iex> {:ok, signature} = RsaEx.sign(message, rsa_private_key)
+  """
+  @spec sign(String.t, private_key) :: {atom, binary}
+  def sign(message, private_key) do
+    {:ok, priv_key} = loads(private_key)
+    {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
+    {:ok, :public_key.sign(message, :sha256, priv_key_seq)}
+  end
+
+  ### Internal functions
+
+  def loads(pem_string) do
+    pem_entries = :public_key.pem_decode(pem_string)
+      validate_pem_length(pem_entries)
+      |> load_pem_entry
+      |> sort_key_tup
+  end
+
+  defp load_pem_entry({:ok, pem_entry}) do
+    load_pem_entry(pem_entry)
+  end
+  defp load_pem_entry(pem_entry) do
+    {:ok, :public_key.pem_entry_decode(pem_entry)}
+  end
+
+  defp validate_pem_length(pem_entries) do
+    case length(pem_entries) do
+      0 -> {:error, "invalid argument"}
+      x when x > 1 -> {:error, "found multiple PEM entries, expected only 1"}
+      x when x == 1 -> {:ok, Enum.at(pem_entries, 0)}
+    end
+  end
+
+  defp sort_key_tup({:ok, key_tup}) do
+    sort_key_tup(key_tup)
+  end
+  defp sort_key_tup(key_tup) do
+    case elem(key_tup, 0) do
+      :RSAPrivateKey ->
+        {:ok, RsaEx.RSAPrivateKey.from_sequence(key_tup)}
+      :RSAPublicKey ->
+        {:ok, RsaEx.RSAPublicKey.from_sequence(key_tup)}
+      x ->
+        {:error, "invalid argument, expected one of[ExPublicKey.RSAPublicKey, ExPublicKey.RSAPrivateKey], found: #{x}"}
+    end
   end
 end
