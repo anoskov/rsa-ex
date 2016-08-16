@@ -23,3 +23,22 @@ end
 ```
 
 ## Usage
+
+* Generate RSA 2048 Private Key
+
+```elixir
+iex> {:ok, priv} = RsaEx.generate_private_key
+```
+
+* Generate RSA 2048 Public Key
+
+```elixir
+iex> {:ok, priv} = RsaEx.generate_private_key
+iex> {:ok, pub} = RsaEx.generate_public_key(priv)
+```
+
+* Generate RSA 2048 Private/Public Keypair
+
+```elixir
+iex> {:ok, {priv, pub}} = RsaEx.generate_keypair
+```
