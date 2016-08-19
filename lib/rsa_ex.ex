@@ -13,7 +13,7 @@ defmodule RsaEx do
     private_key = "ExPrivateKey.pem"
     {_, 0} = System.cmd "openssl", [ "genrsa", "-out", private_key, "2048"], [stderr_to_stdout: true]
     {:ok, priv} = File.read(private_key)
-    {_, 0} = System.cmd "rm", ["-f", private_key]
+    File.rm!(private_key)
 
     {:ok, priv}
   end
@@ -32,8 +32,8 @@ defmodule RsaEx do
      [ "rsa", "-pubout", "-in" , private_key_name, "-out", public_key_name ], [stderr_to_stdout: true]
     {:ok, pub} = File.read(public_key_name)
 
-    {_, 0} = System.cmd "rm", ["-f", private_key_name]
-    {_, 0} = System.cmd "rm", ["-f", public_key_name]
+    File.rm!(private_key_name)
+    File.rm!(public_key_name)
 
     {:ok, pub}
   end
@@ -53,8 +53,8 @@ defmodule RsaEx do
     {:ok, priv} = File.read(private_key_name)
     {:ok, pub} = File.read(public_key_name)
 
-    {_, 0} = System.cmd "rm", ["-f", private_key_name]
-    {_, 0} = System.cmd "rm", ["-f", public_key_name]
+    File.rm!(private_key_name)
+    File.rm!(public_key_name)
 
     {:ok, {priv, pub}}
   end
