@@ -7,6 +7,13 @@ defmodule RsaEx.RSATest do
     assert is_binary(priv)
   end
 
+  test "generate_private_key(\"4096\") generates bigger string" do
+    {:ok, priv_2048} = RsaEx.generate_private_key
+    {:ok, priv_4096} = RsaEx.generate_private_key("4096")
+
+    assert String.length(priv_2048) < String.length(priv_4096)
+  end
+
   test "generate_public_key(private) generates string" do
     {:ok, priv} = RsaEx.generate_private_key
     {:ok, pub} = RsaEx.generate_public_key(priv)
