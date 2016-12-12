@@ -5,8 +5,8 @@ defmodule RsaEx do
   @type public_key :: String.t
 
   @doc """
-  Generates RSA private key
-      iex> {:ok, priv} = RsaEx.generate_private_key
+  Generates RSA private key of {bits} size. Default is 2048.
+      iex> {:ok, priv} = RsaEx.generate_private_key("4096")
   """
   @spec generate_private_key :: {atom, private_key}
   def generate_private_key(bits \\ "2048") do
@@ -39,8 +39,8 @@ defmodule RsaEx do
   end
 
   @doc """
-  Generates RSA private/public keypair
-      iex> {:ok, {priv, pub}} = RsaEx.generate_keypair
+  Generates RSA private/public keypair of {bits} size. Default is 2048.
+      iex> {:ok, {priv, pub}} = RsaEx.generate_keypair("4096")
   """
   @spec generate_keypair :: {atom, {private_key, public_key}}
   def generate_keypair(bits \\ "2048") do
