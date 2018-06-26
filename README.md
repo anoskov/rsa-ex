@@ -63,10 +63,23 @@ iex> {:ok, rsa_private_key} = RsaEx.generate_private_key
 iex> {:ok, signature} = RsaEx.sign("message", rsa_private_key)
 ```
 
+* Sign message with RSA private key specifying a custom dygest type
+
+```elixir
+iex> {:ok, rsa_private_key} = RsaEx.generate_private_key
+iex> {:ok, signature} = RsaEx.sign("message", rsa_private_key, :sha512)
+```
+
 * Verify signature with RSA public key
 
 ```elixir
 iex> {:ok, valid} = RsaEx.verify(message, signature, rsa_public_key)
+```
+
+* Verify signature with RSA public key specifying a custom dygest type
+
+```elixir
+iex> {:ok, valid} = RsaEx.verify(message, signature, rsa_public_key, :sha512)
 ```
 
 * Encrypt message with RSA public key in base64
