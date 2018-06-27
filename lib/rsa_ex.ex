@@ -64,11 +64,11 @@ defmodule RsaEx do
       iex> {:ok, signature} = RsaEx.sign(message, rsa_private_key)
       {:ok, <<...>>}
   """
-  @spec sign(String.t, private_key) :: {atom, binary}
-  def sign(message, private_key) do
+  @spec sign(String.t, private_key, atom) :: {atom, binary}
+  def sign(message, private_key, digest_type \\ :sha256) do
     {:ok, priv_key} = loads(private_key)
     {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
-    {:ok, :public_key.sign(message, :sha256, priv_key_seq)}
+    {:ok, :public_key.sign(message, digest_type, priv_key_seq)}
   end
 
   @doc """
@@ -76,11 +76,11 @@ defmodule RsaEx do
       iex> {:ok, valid} = RsaEx.verify(message, signature, rsa_public_key
       {:ok, true}
   """
-  @spec verify(String.t, binary, public_key) :: {atom, boolean}
-  def verify(message, signature, public_key) do
+  @spec verify(String.t, binary, public_key, atom) :: {atom, boolean}
+  def verify(message, signature, public_key, digest_type \\ :sha256) do
     {:ok, pub_key} = loads(public_key)
     {:ok, pub_key_seq} = RsaEx.RSAPublicKey.as_sequence(pub_key)
-    {:ok, :public_key.verify(message, :sha256, signature, pub_key_seq)}
+    {:ok, :public_key.verify(message, digest_type, signature, pub_key_seq)}
   end
 
   @doc """

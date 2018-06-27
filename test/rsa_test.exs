@@ -35,6 +35,13 @@ defmodule RsaEx.RSATest do
     assert is_binary(signature)
   end
 
+  test "sign(msg, priv_key, dygest_type) generates binary" do
+    {:ok, priv} = RsaEx.generate_private_key
+    {:ok, signature} = RsaEx.sign("message", priv, :sha512)
+
+    assert is_binary(signature)
+  end
+
   test "verify(msg, signature, pub_key) generates true if valid" do
     {:ok, priv} = RsaEx.generate_private_key
     {:ok, pub} = RsaEx.generate_public_key(priv)
@@ -44,11 +51,29 @@ defmodule RsaEx.RSATest do
     assert valid
   end
 
+  test "verify(msg, signature, pub_key, digest_type) generates true if valid" do
+    {:ok, priv} = RsaEx.generate_private_key
+    {:ok, pub} = RsaEx.generate_public_key(priv)
+    {:ok, signature} = RsaEx.sign("message", priv, :sha512)
+    {:ok, valid} = RsaEx.verify("message", signature, pub, :sha512)
+
+    assert valid
+  end
+
   test "verify(msg, signature, pub_key) generates false if invalid" do
     {:ok, priv} = RsaEx.generate_private_key
     {:ok, pub} = RsaEx.generate_public_key(priv)
     {:ok, signature} = RsaEx.sign("message", priv)
     {:ok, invalid} = RsaEx.verify("messages", signature, pub)
+
+    assert invalid == false
+  end
+
+  test "verify(msg, signature, pub_key, digest_type) generates false if invalid" do
+    {:ok, priv} = RsaEx.generate_private_key
+    {:ok, pub} = RsaEx.generate_public_key(priv)
+    {:ok, signature} = RsaEx.sign("message", priv, :sha512)
+    {:ok, invalid} = RsaEx.verify("messages", signature, pub, :sha512)
 
     assert invalid == false
   end
