@@ -35,7 +35,7 @@ defmodule RsaEx.RSAPrivateKey do
       exponent_one: elem(rsa_key_seq, 7),
       exponent_two: elem(rsa_key_seq, 8),
       ctr_coefficient: elem(rsa_key_seq, 9),
-      other_prime_infos: elem(rsa_key_seq, 10),
+      other_prime_infos: elem(rsa_key_seq, 10)
     )
   end
 
@@ -53,7 +53,7 @@ defmodule RsaEx.RSAPrivateKey do
           rsa_private_key.exponent_one,
           rsa_private_key.exponent_two,
           rsa_private_key.ctr_coefficient,
-          rsa_private_key.other_prime_infos,
+          rsa_private_key.other_prime_infos
         }}
       _ ->
         {:error, "invalid RsaEx.RSAPrivateKey: #{inspect rsa_private_key}"}
