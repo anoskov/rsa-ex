@@ -4,7 +4,7 @@ defmodule RsaEx.Mixfile do
   def project do
     [app: :rsa_ex,
      version: "0.3.0",
-     elixir: "~> 1.3",
+     elixir: "~> 1.7",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
@@ -18,7 +18,7 @@ defmodule RsaEx.Mixfile do
   end
 
   defp deps do
-    [{:ex_doc, ">= 0.0.0", only: :dev}]
+    [{:ex_doc, "~> 0.19", only: :dev}]
   end
 
   defp aliases do
