@@ -93,4 +93,36 @@ defmodule RsaEx.RSATest do
     assert is_binary(decrypted)
     assert decrypted == "msg"
   end
+
+  test "encrypt(message, {:public_key, pub_key}) generates encrypted string" do
+    {:ok, {_priv, pub}} = RsaEx.generate_keypair
+    {:ok, encrypted} = RsaEx.encrypt("msg", {:public_key, pub})
+
+    assert is_binary(encrypted)
+  end
+
+  test "encrypt(message, {:private_key, priv_key}) generates encrypted string" do
+    {:ok, {priv, _pub}} = RsaEx.generate_keypair
+    {:ok, encrypted} = RsaEx.encrypt("msg", {:private_key, priv})
+
+    assert is_binary(encrypted)
+  end
+
+  test "decrypt(cipher, {:private_key, priv_key}) generates decoded string" do
+    {:ok, {priv, pub}} = RsaEx.generate_keypair
+    {:ok, encrypted} = RsaEx.encrypt("msg", {:public_key, pub})
+    {:ok, decrypted} = RsaEx.decrypt(encrypted, {:private_key, priv})
+
+    assert is_binary(decrypted)
+    assert decrypted == "msg"
+  end
+
+  test "decrypt(cipher, {:public_key, pub_key}) generates decoded string" do
+    {:ok, {priv, pub}} = RsaEx.generate_keypair
+    {:ok, encrypted} = RsaEx.encrypt("msg", {:private_key, priv})
+    {:ok, decrypted} = RsaEx.decrypt(encrypted, {:public_key, pub})
+
+    assert is_binary(decrypted)
+    assert decrypted == "msg"
+  end
 end

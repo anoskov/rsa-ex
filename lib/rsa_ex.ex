@@ -1,5 +1,5 @@
 defmodule RsaEx do
-  alias RsaEx.RSAPrivateKey
+  alias RsaEx.{RSAPrivateKey, RSAPublicKey}
 
   @type private_key :: String.t
   @type public_key :: String.t
@@ -87,10 +87,39 @@ defmodule RsaEx do
   Encrypt message with RSA public key in base64
       iex> clear_text = "Important message"
       "Important message"
+      iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:public_key, rsa_public_key})
+      {:ok, "Lmbv...HQ=="}
+  """
+  @spec encrypt(String.t, {:public_key, public_key}) :: {atom, String.t}
+  def encrypt(message, {:public_key, public_key}) do
+    {:ok, pub_key} = loads(public_key)
+    {:ok, pub_key_seq} = RsaEx.RSAPublicKey.as_sequence(pub_key)
+    {:ok, :public_key.encrypt_public(message, pub_key_seq)} |> url_encode64
+  end
+
+  @doc """
+  Encrypt message with RSA private key in base64
+      iex> clear_text = "Important message"
+      "Important message"
+      iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:private_key, rsa_private_key})
+      {:ok, "Lmbv...HQ=="}
+  """
+  @spec encrypt(String.t, {:private_key, private_key}) :: {atom, String.t}
+  def encrypt(message, {:private_key, private_key}) do
+    {:ok, priv_key} = loads(private_key)
+    {:ok, priv_key_seq} = RsaEx.RSAPrivateKey.as_sequence(priv_key)
+    {:ok, :public_key.encrypt_private(message, priv_key_seq)} |> url_encode64
+  end
+
+  @doc """
+  Encrypt message with RSA public key in base64
+      iex> clear_text = "Important message"
+      "Important message"
       iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, rsa_public_key)
       {:ok, "Lmbv...HQ=="}
   """
   @spec encrypt(String.t, public_key) :: {atom, String.t}
+  @deprecated "Use encrypt/2 with tuple {:public_key, public_key} instead"
   def encrypt(message, public_key) do
     {:ok, pub_key} = loads(public_key)
     {:ok, pub_key_seq} = RsaEx.RSAPublicKey.as_sequence(pub_key)
@@ -99,9 +128,36 @@ defmodule RsaEx do
 
   @doc """
   Decrypt message with RSA private key
+      iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, {:private_key, rsa_private_key})
+      {:ok, "Important message"}
+  """
+  @spec decrypt(String.t, {:private_key, private_key}) :: {atom, String.t}
+  def decrypt(cipher_msg, {:private_key, private_key}) do
+    {:ok, cipher_bytes} = Base.url_decode64(cipher_msg)
+    {:ok, priv_key} = loads(private_key)
+    {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
+    {:ok, :public_key.decrypt_private(cipher_bytes, priv_key_seq)}
+  end
+
+  @doc """
+  Decrypt message with RSA public key
+      iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, {:public_key, rsa_public_key})
+      {:ok, "Important message"}
+  """
+  @spec decrypt(String.t, {:public_key, public_key}) :: {atom, String.t}
+  def decrypt(cipher_msg, {:public_key, public_key}) do
+    {:ok, cipher_bytes} = Base.url_decode64(cipher_msg)
+    {:ok, pub_key} = loads(public_key)
+    {:ok, pub_key_seq} = RSAPublicKey.as_sequence(pub_key)
+    {:ok, :public_key.decrypt_public(cipher_bytes, pub_key_seq)}
+  end
+
+  @doc """
+  Decrypt message with RSA private key
       iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, rsa_private_key)
       {:ok, "Important message"}
   """
+  @deprecated "Use decrypt/2 with tuple {:private_key, private_key} instead"
   @spec decrypt(String.t, private_key) :: {atom, String.t}
   def decrypt(cipher_msg, private_key) do
     {:ok, cipher_bytes} = Base.url_decode64(cipher_msg)

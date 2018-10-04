@@ -87,13 +87,29 @@ iex> {:ok, valid} = RsaEx.verify(message, signature, rsa_public_key, :sha512)
 ```elixir
 iex> clear_text = "Important message"
 "Important message"
-iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, rsa_public_key)
+iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:public_key, rsa_public_key})
+{:ok, "Lmbv...HQ=="}
+```
+
+* Encrypt message with RSA private key in base64
+
+```elixir
+iex> clear_text = "Important message"
+"Important message"
+iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:private_key, rsa_private_key})
 {:ok, "Lmbv...HQ=="}
 ```
 
 * Decrypt message with RSA private key
 
 ```elixir
-iex> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, rsa_private_key)
+iex> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, {:private_key, rsa_private_key})
+{:ok, "Important message"}
+```
+
+* Decrypt message with RSA public key
+
+```elixir
+iex> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, {:public_key, rsa_public_key})
 {:ok, "Important message"}
 ```
