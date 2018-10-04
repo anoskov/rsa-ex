@@ -78,9 +78,16 @@ defmodule RsaEx.RSATest do
     assert invalid == false
   end
 
-  test "encrypt(message, pub_key) generates encrypted string" do
+  test "encrypt(message, {:public_key, pub_key}) generates encrypted string" do
     {:ok, {_priv, pub}} = RsaEx.generate_keypair
     {:ok, encrypted} = RsaEx.encrypt("msg", {:public_key, pub})
+
+    assert is_binary(encrypted)
+  end
+
+  test "encrypt(message, {:private_key, priv_key}) generates encrypted string" do
+    {:ok, {priv, _pub}} = RsaEx.generate_keypair
+    {:ok, encrypted} = RsaEx.encrypt("msg", {:private_key, priv})
 
     assert is_binary(encrypted)
   end

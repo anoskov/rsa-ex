@@ -98,6 +98,20 @@ defmodule RsaEx do
   end
 
   @doc """
+  Encrypt message with RSA private key in base64
+      iex> clear_text = "Important message"
+      "Important message"
+      iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:private_key, rsa_private_key})
+      {:ok, "Lmbv...HQ=="}
+  """
+  @spec encrypt(String.t, {:private_key, private_key}) :: {atom, String.t}
+  def encrypt(message, {:private_key, private_key}) do
+    {:ok, priv_key} = loads(private_key)
+    {:ok, priv_key_seq} = RsaEx.RSAPrivateKey.as_sequence(priv_key)
+    {:ok, :public_key.encrypt_private(message, priv_key_seq)} |> url_encode64
+  end
+
+  @doc """
   Decrypt message with RSA private key
       iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, rsa_private_key)
       {:ok, "Important message"}
