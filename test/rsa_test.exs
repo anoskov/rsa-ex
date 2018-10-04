@@ -88,7 +88,7 @@ defmodule RsaEx.RSATest do
   test "decrypt(cipher, priv_key) generates decoded string" do
     {:ok, {priv, pub}} = RsaEx.generate_keypair
     {:ok, encrypted} = RsaEx.encrypt("msg", {:public_key, pub})
-    {:ok, decrypted} = RsaEx.decrypt(encrypted, priv)
+    {:ok, decrypted} = RsaEx.decrypt(encrypted, {:private_key, priv})
 
     assert is_binary(decrypted)
     assert decrypted == "msg"

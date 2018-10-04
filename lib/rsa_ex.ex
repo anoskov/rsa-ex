@@ -102,8 +102,8 @@ defmodule RsaEx do
       iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, rsa_private_key)
       {:ok, "Important message"}
   """
-  @spec decrypt(String.t, private_key) :: {atom, String.t}
-  def decrypt(cipher_msg, private_key) do
+  @spec decrypt(String.t, {:private_key, private_key}) :: {atom, String.t}
+  def decrypt(cipher_msg, {:private_key, private_key}) do
     {:ok, cipher_bytes} = Base.url_decode64(cipher_msg)
     {:ok, priv_key} = loads(private_key)
     {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
