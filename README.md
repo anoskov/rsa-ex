@@ -91,6 +91,15 @@ iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:public_key, rsa_public_key
 {:ok, "Lmbv...HQ=="}
 ```
 
+* Encrypt message with RSA private key in base64
+
+```elixir
+iex> clear_text = "Important message"
+"Important message"
+iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:private_key, rsa_private_key})
+{:ok, "Lmbv...HQ=="}
+```
+
 * Decrypt message with RSA private key
 
 ```elixir
