@@ -87,11 +87,11 @@ defmodule RsaEx do
   Encrypt message with RSA public key in base64
       iex> clear_text = "Important message"
       "Important message"
-      iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, rsa_public_key)
+      iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:public_key, rsa_public_key})
       {:ok, "Lmbv...HQ=="}
   """
-  @spec encrypt(String.t, public_key) :: {atom, String.t}
-  def encrypt(message, public_key) do
+  @spec encrypt(String.t, {:public_key, public_key}) :: {atom, String.t}
+  def encrypt(message, {:public_key, public_key}) do
     {:ok, pub_key} = loads(public_key)
     {:ok, pub_key_seq} = RsaEx.RSAPublicKey.as_sequence(pub_key)
     {:ok, :public_key.encrypt_public(message, pub_key_seq)} |> url_encode64

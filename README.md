@@ -87,7 +87,7 @@ iex> {:ok, valid} = RsaEx.verify(message, signature, rsa_public_key, :sha512)
 ```elixir
 iex> clear_text = "Important message"
 "Important message"
-iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, rsa_public_key)
+iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:public_key, rsa_public_key})
 {:ok, "Lmbv...HQ=="}
 ```
 
