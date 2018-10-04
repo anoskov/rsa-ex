@@ -1,5 +1,5 @@
 defmodule RsaEx do
-  alias RsaEx.RSAPrivateKey
+  alias RsaEx.{RSAPrivateKey, RSAPublicKey}
 
   @type private_key :: String.t
   @type public_key :: String.t
@@ -113,7 +113,7 @@ defmodule RsaEx do
 
   @doc """
   Decrypt message with RSA private key
-      iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, rsa_private_key)
+      iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, {:private_key, rsa_private_key})
       {:ok, "Important message"}
   """
   @spec decrypt(String.t, {:private_key, private_key}) :: {atom, String.t}
@@ -122,6 +122,19 @@ defmodule RsaEx do
     {:ok, priv_key} = loads(private_key)
     {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
     {:ok, :public_key.decrypt_private(cipher_bytes, priv_key_seq)}
+  end
+
+  @doc """
+  Decrypt message with RSA public key
+      iex(8)> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, {:public_key, rsa_public_key})
+      {:ok, "Important message"}
+  """
+  @spec decrypt(String.t, {:public_key, public_key}) :: {atom, String.t}
+  def decrypt(cipher_msg, {:public_key, public_key}) do
+    {:ok, cipher_bytes} = Base.url_decode64(cipher_msg)
+    {:ok, pub_key} = loads(public_key)
+    {:ok, pub_key_seq} = RSAPublicKey.as_sequence(pub_key)
+    {:ok, :public_key.decrypt_public(cipher_bytes, pub_key_seq)}
   end
 
   ### Internal functions

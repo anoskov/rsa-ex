@@ -103,6 +103,13 @@ iex> {:ok, cipher_text} = RsaEx.encrypt(clear_text, {:private_key, rsa_private_k
 * Decrypt message with RSA private key
 
 ```elixir
-iex> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, rsa_private_key)
+iex> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, {:private_key, rsa_private_key})
+{:ok, "Important message"}
+```
+
+* Decrypt message with RSA public key
+
+```elixir
+iex> {:ok, decrypted_clear_text} = RsaEx.decrypt(cipher_text, {:public_key, rsa_public_key})
 {:ok, "Important message"}
 ```
