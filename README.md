@@ -4,7 +4,7 @@ Library for working with RSA keys using Elixir and OpenSSL ports.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+If [available in Hex](https://hex.pm/packages/rsa_ex), the package can be installed as:
 
 * Add `rsa_ex` to your list of dependencies in `mix.exs`:
 
