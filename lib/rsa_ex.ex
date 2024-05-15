@@ -133,10 +133,14 @@ defmodule RsaEx do
   """
   @spec decrypt(String.t, {:private_key, private_key}) :: {atom, String.t}
   def decrypt(cipher_msg, {:private_key, private_key}) do
-    {:ok, cipher_bytes} = Base.url_decode64(cipher_msg)
-    {:ok, priv_key} = loads(private_key)
-    {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
-    {:ok, :public_key.decrypt_private(cipher_bytes, priv_key_seq)}
+     case Base.url_decode64(cipher_msg) do
+       {:ok, cipher_bytes} ->
+          {:ok, priv_key} = loads(private_key)
+          {:ok, priv_key_seq} = RSAPrivateKey.as_sequence(priv_key)
+          {:ok, :public_key.decrypt_private(cipher_bytes, priv_key_seq)}
+
+      _ -> :error
+     end
   end
 
   @doc """
